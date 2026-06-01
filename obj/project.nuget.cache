@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "Olk0s2RSPhk=",
+  "success": true,
+  "projectFilePath": "/home/duvan/Documents/imprimir/imprimir.csproj",
+  "expectedPackageFiles": [
+    "/home/duvan/.nuget/packages/microsoft.aspnetcore.openapi/10.0.8/microsoft.aspnetcore.openapi.10.0.8.nupkg.sha512",
+    "/home/duvan/.nuget/packages/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
