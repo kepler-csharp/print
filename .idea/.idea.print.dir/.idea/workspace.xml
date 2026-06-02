@@ -5,43 +5,7 @@
     <projectFile profileName="https">imprimir.csproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cbf556c3-4803-433b-937f-3f90ed5dfbc0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Controllers/PrintController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DTOs/PrintRequest.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/PrintedTicket.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Queue/BackgroundTaskQueue.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Queue/IBackgroundTaskQueue.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Queue/QueueHostedService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Services/IQueueService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Services/QueueService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/PrintTicketRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/PrintTicketRequestV2.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/ServiceTicket.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/ServiceTicket.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/imprimir.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/imprimir.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/imprimir.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/imprimir.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.AssemblyInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.assets.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.csproj.CoreCompileInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.csproj.FileListAbsolute.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.genruntimeconfig.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.genruntimeconfig.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/imprimir.sourcelink.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/ref/imprimir.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/ref/imprimir.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/refint/imprimir.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/refint/imprimir.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/rjsmrazor.dswa.cache.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/rjsmrazor.dswa.cache.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/rpswa.dswa.cache.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/rpswa.dswa.cache.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/imprimir.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/imprimir.csproj.nuget.dgspec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/imprimir.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/obj/imprimir.csproj.nuget.g.props" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.assets.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.nuget.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.packagespec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.model.nuget.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.restore.info" afterDir="false" />
-    </list>
+    <list default="true" id="cbf556c3-4803-433b-937f-3f90ed5dfbc0" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -123,7 +87,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1780428380488</updated>
-      <workItem from="1780428382136" duration="9788000" />
+      <workItem from="1780428382136" duration="10435000" />
     </task>
     <servers />
   </component>

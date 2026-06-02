@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/duvan/Documents/imprimir/imprimir.csproj": {}
+    "/home/cohorte6/Escritorio/ProyectosJornadaTarde/print/imprimir.csproj": {}
   },
   "projects": {
-    "/home/duvan/Documents/imprimir/imprimir.csproj": {
+    "/home/cohorte6/Escritorio/ProyectosJornadaTarde/print/imprimir.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/duvan/Documents/imprimir/imprimir.csproj",
+        "projectUniqueName": "/home/cohorte6/Escritorio/ProyectosJornadaTarde/print/imprimir.csproj",
         "projectName": "imprimir",
-        "projectPath": "/home/duvan/Documents/imprimir/imprimir.csproj",
-        "packagesPath": "/home/duvan/.nuget/packages/",
-        "outputPath": "/home/duvan/Documents/imprimir/obj/",
+        "projectPath": "/home/cohorte6/Escritorio/ProyectosJornadaTarde/print/imprimir.csproj",
+        "packagesPath": "/home/cohorte6/.nuget/packages/",
+        "outputPath": "/home/cohorte6/Escritorio/ProyectosJornadaTarde/print/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/duvan/.nuget/NuGet/NuGet.Config"
+          "/home/cohorte6/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
