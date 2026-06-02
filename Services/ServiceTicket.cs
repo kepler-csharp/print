@@ -129,15 +129,14 @@ public class PrintService
     private static string BuildTicketText(PrintedTicket request)
     {
         return string.Join('\n',
-            Center("FIRMEZA"),
+            Center("Kepler Tickets"),
             Line(),
             Center(request.EventName),
             "",
-            Label("Correo de Cliente", request.CustomerEmail),
+            Label("Correo", request.CustomerEmail),
             Label("Fecha", request.ShowtimeDay),
             Label("Hora", request.ShowtimeHour),
-            Label("Asientos", request.SeatLabel),
-            Label("Codigo", request.QrCode),
+            Label("Asiento", request.SeatLabel),
             Line(),
             Center("Presenta este ticket"),
             Center("en el ingreso del evento"));
