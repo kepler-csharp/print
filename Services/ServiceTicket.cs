@@ -15,11 +15,9 @@ public class PrintService
         _logger = logger;
     }
     
-    public async Task<PrintResponse> PrintAsync(PrintTicketRequest request)
+    public async Task<PrintResponse> PrintAsync(PrintedTicket request)
     {
-        var printerName = string.IsNullOrWhiteSpace(request.PrinterName)
-            ? _configuration["Printing:DefaultPrinterName"]
-            : request.PrinterName;
+        var printerName = _configuration["Printing:DefaultPrinterName"];
 
         var filePath = Path.Combine(Path.GetTempPath(), $"ticket-{Guid.NewGuid():N}.bin");
         await File.WriteAllBytesAsync(filePath, BuildTicketBytes(request));
@@ -111,16 +109,16 @@ public class PrintService
             : normalizedContent + Environment.NewLine;
     }
 
-    private static byte[] BuildTicketBytes(PrintTicketRequest request)
+    private static byte[] BuildTicketBytes(PrintedTicket request)
     {
         var bytes = new List<byte>();
         bytes.AddRange([0x1B, 0x40]);
         bytes.AddRange(Encoding.Latin1.GetBytes(Normalize(BuildTicketText(request))));
 
-        if (!string.IsNullOrWhiteSpace(request.QrContent))
+        if (!string.IsNullOrWhiteSpace(request.QrCode))
         {
             bytes.AddRange(Encoding.Latin1.GetBytes("\n        ESCANEA TU QR\n\n"));
-            bytes.AddRange(BuildQrBytes(request.QrContent.Trim()));
+            bytes.AddRange(BuildQrBytes(request.QrCode.Trim()));
             bytes.AddRange(Encoding.Latin1.GetBytes("\n\n"));
         }
 
@@ -128,27 +126,18 @@ public class PrintService
         return bytes.ToArray();
     }
 
-    private static string BuildTicketText(PrintTicketRequest request)
+    private static string BuildTicketText(PrintedTicket request)
     {
-        if (!string.IsNullOrWhiteSpace(request.Content))
-            return request.Content;
-
-        var seats = request.Seats.Length == 0
-            ? "Sin asignar"
-            : string.Join(", ", request.Seats.Where(seat => !string.IsNullOrWhiteSpace(seat)));
-
         return string.Join('\n',
             Center("FIRMEZA"),
             Line(),
             Center(request.EventName),
             "",
-            Label("Persona", request.PersonName),
-            Label("Fecha", request.EventDate),
-            Label("Hora", request.EventTime),
-            Label("Lugar", request.Venue),
-            Label("Entrada", request.TicketType),
-            Label("Asientos", seats),
-            Label("Codigo", request.OrderCode),
+            Label("Correo de Cliente", request.CustomerEmail),
+            Label("Fecha", request.ShowtimeDay),
+            Label("Hora", request.ShowtimeHour),
+            Label("Asientos", request.SeatLabel),
+            Label("Codigo", request.QrCode),
             Line(),
             Center("Presenta este ticket"),
             Center("en el ingreso del evento"));

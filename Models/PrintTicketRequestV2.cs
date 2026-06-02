@@ -1,6 +1,6 @@
 namespace imprimir.Models;
 
-public class PrintTicketRequest
+public class PrintTicketRequestV2
 {
     public string? PrinterName { get; set; }
     public string? Content { get; set; }

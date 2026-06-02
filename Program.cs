@@ -1,4 +1,5 @@
 using imprimir.Models;
+using imprimir.Queue;
 using imprimir.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +24,15 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddSingleton<PrintService>();
+builder.Services.AddScoped<PrintService>();
+builder.Services.AddScoped<IQueueService, QueueService>();
+builder.Services.AddControllers();
+
+// Queues
+builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+
+// Workers
+builder.Services.AddHostedService<QueueHostedService>();
 
 var app = builder.Build();
 
@@ -32,16 +41,19 @@ app.UseCors("PrintApiCors");
 app.MapGet("/", () => Results.Ok(new { status = "ok", service = "print-api" }));
 app.MapGet("/health", () => Results.Ok(new { status = "ok", service = "print-api" }));
 
-app.MapGet("/imprimir", GetPrintTicketStructure);
-app.MapGet("/api/print/ticket", GetPrintTicketStructure);
-app.MapPost("/imprimir", Print);
-app.MapPost("/api/print/ticket", Print);
+//app.MapGet("/imprimir", GetPrintTicketStructure);
+//app.MapGet("/api/print/ticket", GetPrintTicketStructure);
+
+//app.MapPost("/imprimir", Print);
+//app.MapPost("/api/print/ticket", Print);
+
+app.MapControllers();
 
 app.Run();
 
-static IResult GetPrintTicketStructure()
+/*static IResult GetPrintTicketStructure()
 {
-    return Results.Ok(new PrintTicketRequest
+    return Results.Ok(new PrintTicketRequestV2
     {
         PrinterName = null,
         Content = null,
@@ -55,9 +67,9 @@ static IResult GetPrintTicketStructure()
         Seats = ["Fila A - Silla 12"],
         QrContent = "EVT-000123|Nombre de la persona|Nombre del evento|Fila A - Silla 12"
     });
-}
+}*/
 
-static async Task<IResult> Print(PrintTicketRequest? request, PrintService printer)
+/*static async Task<IResult> Print(PrintTicketRequestV2? request, PrintService printer)
 {
     if (request is null)
     {
@@ -79,4 +91,4 @@ static async Task<IResult> Print(PrintTicketRequest? request, PrintService print
 
     var response = await printer.PrintAsync(request);
     return response.Success ? Results.Ok(response) : Results.BadRequest(response);
-}
+}*/
