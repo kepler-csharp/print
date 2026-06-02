@@ -1,6 +1,5 @@
 using imprimir.Models;
-using imprimir.Models;
-using imprimir.Services;    
+using imprimir.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace imprimir.Controllers;
@@ -16,17 +15,44 @@ public class PrintController : ControllerBase
         _serviceTicket = serviceTicket;
     }
 
+    [HttpGet("health")]
+    public IActionResult Health()
+    {
+        return Ok(new
+        {
+            status = "ok",
+            service = "print-api"
+        });
+    }
+
+    [HttpGet("printers")]
+    public async Task<IActionResult> GetPrinters()
+    {
+        var printers = await _serviceTicket.GetPrintersAsync();
+        return Ok(new
+        {
+            success = true,
+            printers
+        });
+    }
+
     [HttpPost("ticket")]
     public async Task<IActionResult> PrintTicket([FromBody] PrintTicketRequest request)
     {
-        if (string.IsNullOrWhiteSpace(request.PrinterName))
-            return BadRequest("Debe enviar el nombre de la impresora.");
+        if (request is null)
+        {
+            return BadRequest(new PrintResponse
+            {
+                Success = false,
+                Message = "Debe enviar los datos del ticket."
+            });
+        }
 
         var result = await _serviceTicket.PrintTicketAsync(request);
 
-        if (!result)
-            return BadRequest("No se pudo imprimir el ticket.");
+        if (!result.Success)
+            return BadRequest(result);
 
-        return Ok("Ticket enviado a la impresora.");
+        return Ok(result);
     }
 }

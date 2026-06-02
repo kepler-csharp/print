@@ -4,5 +4,6 @@ namespace imprimir.Services;
 
 public interface IServiceTicket
 {
-    public Task<bool> PrintTicketAsync(PrintTicketRequest request);
+    Task<PrintResponse> PrintTicketAsync(PrintTicketRequest request);
+    Task<IReadOnlyList<PrinterInfo>> GetPrintersAsync();
 }
