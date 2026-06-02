@@ -1,39 +1,28 @@
 using System.Diagnostics;
+using System.Text;
 using imprimir.Models;
 
 namespace imprimir.Services;
 
-public class LinuxPrintService : IServiceTicket
+public class PrintService
 {
     private readonly IConfiguration _configuration;
-    private readonly ILogger<LinuxPrintService> _logger;
+    private readonly ILogger<PrintService> _logger;
 
-    public LinuxPrintService(IConfiguration configuration, ILogger<LinuxPrintService> logger)
+    public PrintService(IConfiguration configuration, ILogger<PrintService> logger)
     {
         _configuration = configuration;
         _logger = logger;
     }
-
-    public async Task<PrintResponse> PrintTicketAsync(PrintTicketRequest request)
+    
+    public async Task<PrintResponse> PrintAsync(PrintTicketRequest request)
     {
         var printerName = string.IsNullOrWhiteSpace(request.PrinterName)
             ? _configuration["Printing:DefaultPrinterName"]
             : request.PrinterName;
 
-        var ticket = $"""
-                      FIRMEZA
-                      -------------------------
-                      Cliente: {request.Customer}
-                      Producto: {request.Product}
-                      Total: ${request.Total}
-                      -------------------------
-                      Gracias por su compra
-
-                      """;
-
-        var filePath = $"/tmp/ticket-{Guid.NewGuid()}.txt";
-
-        await File.WriteAllTextAsync(filePath, ticket);
+        var filePath = Path.Combine(Path.GetTempPath(), $"ticket-{Guid.NewGuid():N}.bin");
+        await File.WriteAllBytesAsync(filePath, BuildTicketBytes(request));
 
         var processInfo = new ProcessStartInfo
         {
@@ -49,6 +38,8 @@ public class LinuxPrintService : IServiceTicket
             processInfo.ArgumentList.Add(printerName);
         }
 
+        processInfo.ArgumentList.Add("-o");
+        processInfo.ArgumentList.Add("raw");
         processInfo.ArgumentList.Add(filePath);
 
         try
@@ -60,7 +51,7 @@ public class LinuxPrintService : IServiceTicket
                 return new PrintResponse
                 {
                     Success = false,
-                    Message = "No se pudo iniciar el comando de impresion.",
+                    Message = "No se pudo iniciar el comando lp.",
                     PrinterName = printerName
                 };
             }
@@ -78,7 +69,7 @@ public class LinuxPrintService : IServiceTicket
                 return new PrintResponse
                 {
                     Success = false,
-                    Message = "No se pudo imprimir el ticket.",
+                    Message = "No se pudo imprimir.",
                     PrinterName = printerName,
                     Error = string.IsNullOrWhiteSpace(standardError) ? standardOutput : standardError
                 };
@@ -87,7 +78,7 @@ public class LinuxPrintService : IServiceTicket
             return new PrintResponse
             {
                 Success = true,
-                Message = "Ticket enviado a la impresora.",
+                Message = "Enviado a la impresora.",
                 PrinterName = printerName
             };
         }
@@ -98,7 +89,7 @@ public class LinuxPrintService : IServiceTicket
             return new PrintResponse
             {
                 Success = false,
-                Message = "No se pudo ejecutar el comando de impresion.",
+                Message = "No se pudo ejecutar lp.",
                 PrinterName = printerName,
                 Error = ex.Message
             };
@@ -110,53 +101,129 @@ public class LinuxPrintService : IServiceTicket
         }
     }
 
-    public async Task<IReadOnlyList<PrinterInfo>> GetPrintersAsync()
+    private static string Normalize(string content)
     {
-        var defaultPrinter = _configuration["Printing:DefaultPrinterName"];
-        var processInfo = new ProcessStartInfo
+        var normalizedContent = content.Replace("\r\n", "\n", StringComparison.Ordinal)
+            .Replace("\r", "\n", StringComparison.Ordinal);
+
+        return normalizedContent.EndsWith('\n')
+            ? normalizedContent
+            : normalizedContent + Environment.NewLine;
+    }
+
+    private static byte[] BuildTicketBytes(PrintTicketRequest request)
+    {
+        var bytes = new List<byte>();
+        bytes.AddRange([0x1B, 0x40]);
+        bytes.AddRange(Encoding.Latin1.GetBytes(Normalize(BuildTicketText(request))));
+
+        if (!string.IsNullOrWhiteSpace(request.QrContent))
         {
-            FileName = "lpstat",
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false
-        };
+            bytes.AddRange(Encoding.Latin1.GetBytes("\n        ESCANEA TU QR\n\n"));
+            bytes.AddRange(BuildQrBytes(request.QrContent.Trim()));
+            bytes.AddRange(Encoding.Latin1.GetBytes("\n\n"));
+        }
 
-        processInfo.ArgumentList.Add("-a");
+        bytes.AddRange(Encoding.Latin1.GetBytes("\n\n"));
+        return bytes.ToArray();
+    }
 
-        try
+    private static string BuildTicketText(PrintTicketRequest request)
+    {
+        if (!string.IsNullOrWhiteSpace(request.Content))
+            return request.Content;
+
+        var seats = request.Seats.Length == 0
+            ? "Sin asignar"
+            : string.Join(", ", request.Seats.Where(seat => !string.IsNullOrWhiteSpace(seat)));
+
+        return string.Join('\n',
+            Center("FIRMEZA"),
+            Line(),
+            Center(request.EventName),
+            "",
+            Label("Persona", request.PersonName),
+            Label("Fecha", request.EventDate),
+            Label("Hora", request.EventTime),
+            Label("Lugar", request.Venue),
+            Label("Entrada", request.TicketType),
+            Label("Asientos", seats),
+            Label("Codigo", request.OrderCode),
+            Line(),
+            Center("Presenta este ticket"),
+            Center("en el ingreso del evento"));
+    }
+
+    private static string Label(string label, string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return $"{label}: -";
+
+        const int labelWidth = 9;
+        var prefix = $"{label}:".PadRight(labelWidth);
+        return Wrap($"{prefix}{value.Trim()}");
+    }
+
+    private static string Wrap(string value)
+    {
+        const int width = 32;
+        if (value.Length <= width)
+            return value;
+
+        var lines = new List<string>();
+        var current = "";
+
+        foreach (var word in value.Split(' ', StringSplitOptions.RemoveEmptyEntries))
         {
-            using var process = Process.Start(processInfo);
-
-            if (process == null)
-                return [];
-
-            var output = await process.StandardOutput.ReadToEndAsync();
-            var error = await process.StandardError.ReadToEndAsync();
-            await process.WaitForExitAsync();
-
-            if (process.ExitCode != 0)
+            var candidate = current.Length == 0 ? word : $"{current} {word}";
+            if (candidate.Length <= width)
             {
-                _logger.LogError("No se pudieron consultar las impresoras. lpstat exit code: {ExitCode}. Error: {Error}",
-                    process.ExitCode,
-                    error);
-                return [];
+                current = candidate;
+                continue;
             }
 
-            return output
-                .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                .Select(line => line.Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault())
-                .Where(name => !string.IsNullOrWhiteSpace(name))
-                .Select(name => new PrinterInfo
-                {
-                    Name = name!,
-                    IsDefault = string.Equals(name, defaultPrinter, StringComparison.OrdinalIgnoreCase)
-                })
-                .ToList();
+            if (current.Length > 0)
+                lines.Add(current);
+
+            current = word;
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "No se pudieron consultar las impresoras.");
-            return [];
-        }
+
+        if (current.Length > 0)
+            lines.Add(current);
+
+        return string.Join('\n', lines);
+    }
+
+    private static string Center(string? value)
+    {
+        const int width = 32;
+        value = string.IsNullOrWhiteSpace(value) ? "-" : value.Trim();
+
+        if (value.Length >= width)
+            return Wrap(value);
+
+        return value.PadLeft((width + value.Length) / 2).PadRight(width);
+    }
+
+    private static string Line() => "--------------------------------";
+
+    private static byte[] BuildQrBytes(string qrContent)
+    {
+        var data = Encoding.UTF8.GetBytes(qrContent);
+        var length = data.Length + 3;
+        var pL = (byte)(length % 256);
+        var pH = (byte)(length / 256);
+        var bytes = new List<byte>();
+
+        bytes.AddRange([0x1B, 0x61, 0x01]);
+        bytes.AddRange([0x1D, 0x28, 0x6B, 0x04, 0x00, 0x31, 0x41, 0x32, 0x00]);
+        bytes.AddRange([0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x43, 0x06]);
+        bytes.AddRange([0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x45, 0x31]);
+        bytes.AddRange([0x1D, 0x28, 0x6B, pL, pH, 0x31, 0x50, 0x30]);
+        bytes.AddRange(data);
+        bytes.AddRange([0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x51, 0x30]);
+        bytes.AddRange([0x1B, 0x61, 0x00]);
+
+        return bytes.ToArray();
     }
 }

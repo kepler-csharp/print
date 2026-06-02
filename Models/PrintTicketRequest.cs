@@ -1,19 +1,16 @@
 namespace imprimir.Models;
 
-using System.ComponentModel.DataAnnotations;
-
 public class PrintTicketRequest
 {
-    public string PrinterName { get; set; } = "";
-
-    [Required(ErrorMessage = "El cliente es obligatorio.")]
-    [MinLength(1, ErrorMessage = "El cliente es obligatorio.")]
-    public string Customer { get; set; } = "";
-
-    [Required(ErrorMessage = "El producto es obligatorio.")]
-    [MinLength(1, ErrorMessage = "El producto es obligatorio.")]
-    public string Product { get; set; } = "";
-
-    [Range(0.01, double.MaxValue, ErrorMessage = "El total debe ser mayor a 0.")]
-    public decimal Total { get; set; }
+    public string? PrinterName { get; set; }
+    public string? Content { get; set; }
+    public string? EventName { get; set; }
+    public string? PersonName { get; set; }
+    public string? EventDate { get; set; }
+    public string? EventTime { get; set; }
+    public string? Venue { get; set; }
+    public string? OrderCode { get; set; }
+    public string? TicketType { get; set; }
+    public string[] Seats { get; set; } = [];
+    public string? QrContent { get; set; }
 }

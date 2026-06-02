@@ -1,0 +1,14 @@
+{
+  "eventName": "Concierto Firmeza Live",
+  "personName": "Duvan Ramirez",
+  "eventDate": "2026-06-15",
+  "eventTime": "8:00 PM",
+  "venue": "Teatro Principal",
+  "ticketType": "VIP",
+  "seats": [
+    "Fila A - Silla 12",
+    "Fila A - Silla 13"
+  ],
+  "orderCode": "EVT-000123",
+  "qrContent": "EVT-000123|Duvan Ramirez|Concierto Firmeza Live|Fila A 12-13"
+}

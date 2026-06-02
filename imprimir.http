@@ -1,24 +1,16 @@
 @imprimir_HostAddress = http://localhost:5249
 
-GET {{imprimir_HostAddress}}/api/print/health
+GET {{imprimir_HostAddress}}/imprimir
 Accept: application/json
 
 ###
 
-GET {{imprimir_HostAddress}}/api/print/printers
-Accept: application/json
-
-###
-
-POST {{imprimir_HostAddress}}/api/print/ticket
+POST {{imprimir_HostAddress}}/imprimir
 Content-Type: application/json
 Accept: application/json
 
 {
-  "printerName": "XP-58",
-  "customer": "Cliente de prueba",
-  "product": "Producto de prueba",
-  "total": 12000
+  "content": "FIRMEZA\n-------------------------\nCliente: Cliente de prueba\nProducto: Producto de prueba\nPrecio: $12.000\n-------------------------\nGracias por su compra\n"
 }
 
 ###

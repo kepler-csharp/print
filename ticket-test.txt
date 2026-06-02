@@ -1,0 +1,28 @@
+          FIRMEZA
+    NIT 000.000.000-0
+  Calle 00 #00-00 Ciudad
+       Tel: 300 000 0000
+--------------------------------
+Fecha: 2026-06-01  Hora: 20:55
+Ticket: TCK-000123
+Cajero: Duvan
+--------------------------------
+Cliente: Cliente de prueba
+--------------------------------
+Cant  Producto        Total
+--------------------------------
+1     Producto uno    12.000
+2     Producto dos     8.000
+--------------------------------
+Subtotal:             20.000
+Descuento:                 0
+TOTAL:                20.000
+--------------------------------
+Metodo: Efectivo
+Gracias por tu compra
+
+        Escanea el QR
+      para ver tu compra
+
+          [  QR  ]
+
