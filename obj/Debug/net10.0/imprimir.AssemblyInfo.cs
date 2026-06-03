@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("imprimir")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dc42720b1c34209531e836a1cf9340202696ea6e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+450f834695031a0ea9082ca4eb84262a3e2808f3")]
 [assembly: System.Reflection.AssemblyProductAttribute("imprimir")]
 [assembly: System.Reflection.AssemblyTitleAttribute("imprimir")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
